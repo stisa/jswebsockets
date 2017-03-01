@@ -1,14 +1,16 @@
 # Package
 version       = "0.1.0"
 author        = "stisa"
-description   = "Wraps js websockets"
+description   = "Wrapper for js websockets"
 license       = "MIT"
+
+srcDir = "src"
 
 # Deps
 requires: "nim >= 0.14.0"
 
 task docs:
-  exec("nim doc2 -o:docs/websockets.html websockets.nim")
+  exec("nim doc2 -o:docs/websockets.html ./src/websockets.nim")
   exec("nim e buildex.nims")
 task exampler:
   exec("nim e buildex.nims")
