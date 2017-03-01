@@ -1,14 +1,4 @@
-Websockets
-----
-
-Beginning of a wrapper for websockets, for the javascript backend of [nim](https://nim-lang.org)
-  
-[Examples](http://stisa.space/websockets)  
-
-[Generated Docs](http://stisa.space/websockets/websockets.html)
-
-```nim
-import websockets
+import ../websockets
 
 var ws = openws("ws://echo.websocket.org/")
 var outputid = "output" # nicer syntax for appending
@@ -21,5 +11,4 @@ ws.onmessage = proc(e:MessageEvent) =
   ws.close(1000,"received msg")
 ws.onclose = proc(e:CloseEvent) =
   outputid.append("closing: ",e.reason)
-```
 
