@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <meta name="description" content="Examples for wsnim">
+  <meta name="description" content="Examples for websockets">
   <meta name="author" content="stisa">
   <link rel="stylesheet" href="http://stisa.space/css/main.css">
   <link rel="stylesheet" href="http://stisa.space/css/prism.css">
@@ -27,7 +27,7 @@
       <a href="/projects/">Projects</a>
       <a href="/about/">About Me</a>
       <br/>
-      <a href="/wsnim/">wsnim</a>
+      <a href="/websockets/">websockets</a>
     </div>
   </header>
   <section class="content">
@@ -38,7 +38,7 @@
     </section>
     <section class="examplecode">
       <h2>Code</h2>
-      <pre><code class="language-nim">import ../websockets
+      <pre><code class="language-nim">import ../src/websockets
 
 var ws = openws("ws://echo.websocket.org/")
 var outputid = "output" # nicer syntax for appending
@@ -48,7 +48,7 @@ ws.onopen = proc(e:Event) =
   ws.send("test")
 ws.onmessage = proc(e:MessageEvent) =
   outputid.append("received: ",e.data)
-  ws.close(1000,"received msg")
+  ws.close(scNormal,"received msg")
 ws.onclose = proc(e:CloseEvent) =
   outputid.append("closing: ",e.reason)
 

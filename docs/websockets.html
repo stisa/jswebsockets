@@ -1267,9 +1267,9 @@ function main() {
 <dd>
 
 &nbsp;&nbsp;<a
-href="/tree/master/websockets.nim#L6"
+href="/tree/master/src/websockets.nim#L6"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/websockets.nim#L6" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/websockets.nim#L6" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 <dt id="CloseEvent"><a name="CloseEvent"></a><pre><span class="Identifier">CloseEvent</span> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">Event</span>
@@ -1278,20 +1278,42 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">wasClean</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span>
 </pre></dt>
 <dd>
+<p>Status code	Name	Description</p>
+<p>0–999	 	Reserved and not used.</p>
+<p>1000	CLOSE_NORMAL	Normal closure; the connection successfully completed whatever purpose for which it was created.</p>
+<p>1001	CLOSE_GOING_AWAY	The endpoint is going away, either because of a server failure or because the browser is navigating away from the page that opened the connection.</p>
+<p>1002	CLOSE_PROTOCOL_ERROR	The endpoint is terminating the connection due to a protocol error.</p>
+<p>1003	CLOSE_UNSUPPORTED	The connection is being terminated because the endpoint received data of a type it cannot accept (for example, a text-only endpoint received binary data).</p>
+<p>1004	 	Reserved. A meaning might be defined in the future.</p>
+<p>1005	CLOSE_NO_STATUS	Reserved.  Indicates that no status code was provided even though one was expected.</p>
+<p>1006	CLOSE_ABNORMAL	Reserved. Used to indicate that a connection was closed abnormally (that is, with no close frame being sent) when a status code is expected.</p>
+<p>1007	Unsupported Data	The endpoint is terminating the connection because a message was received that contained inconsistent data (e.g., non-UTF-8 data within a text message).</p>
+<p>1008	Policy Violation	The endpoint is terminating the connection because it received a message that violates its policy. This is a generic status code, used when codes 1003 and 1009 are not suitable.</p>
+<p>1009	CLOSE_TOO_LARGE	The endpoint is terminating the connection because a data frame was received that is too large.</p>
+<p>1010	Missing Extension	The client is terminating the connection because it expected the server to negotiate one or more extension, but the server didn't.</p>
+<p>1011	Internal Error	The server is terminating the connection because it encountered an unexpected condition that prevented it from fulfilling the request.</p>
+<p>1012	Service Restart	The server is terminating the connection because it is restarting. [Ref]</p>
+<p>1013	Try Again Later	The server is terminating the connection due to a temporary condition, e.g. it is overloaded and is casting off some of its clients. [Ref]</p>
+<p>1014	 	Reserved for future use by the WebSocket standard.</p>
+<p>1015	TLS Handshake	Reserved. Indicates that the connection was closed due to a failure to perform a TLS handshake (e.g., the server certificate can't be verified).</p>
+<p>1016–1999	 	Reserved for future use by the WebSocket standard.</p>
+<p>2000–2999	 	Reserved for use by WebSocket extensions.</p>
+<p>3000–3999	 	Available for use by libraries and frameworks. May not be used by applications. Available for registration at the IANA via first-come, first-serve.</p>
+<p>4000–4999	 	Available for use by applications.</p>
 
 &nbsp;&nbsp;<a
-href="/tree/master/websockets.nim#L9"
+href="/tree/master/src/websockets.nim#L9"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/websockets.nim#L9" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/websockets.nim#L9" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 <dt id="WebSocket"><a name="WebSocket"></a><pre><span class="Identifier">WebSocket</span> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">WebSocketObj</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="/tree/master/websockets.nim#L22"
+href="/tree/master/src/websockets.nim#L68"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/websockets.nim#L22" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/websockets.nim#L68" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
@@ -1303,9 +1325,9 @@ class="link-seesrc" target="_blank">Source</a>
 <dd>
 
 &nbsp;&nbsp;<a
-href="/tree/master/websockets.nim#L24"
+href="/tree/master/src/websockets.nim#L70"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/websockets.nim#L24" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/websockets.nim#L70" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 <dt id="openws"><a name="openws,string,seq[string]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">openws</span><span class="Other">(</span><span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">protocols</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">WebSocket</span> <span class="Other pragmabegin">{.</span><div class="pragma">
@@ -1313,36 +1335,36 @@ class="link-seesrc" target="_blank">Source</a>
 <dd>
 
 &nbsp;&nbsp;<a
-href="/tree/master/websockets.nim#L26"
+href="/tree/master/src/websockets.nim#L72"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/websockets.nim#L26" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/websockets.nim#L72" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 <dt id="send"><a name="send,WebSocket,cstring"></a><pre><span class="Keyword">proc</span> <span class="Identifier">send</span><span class="Other">(</span><span class="Identifier">ws</span><span class="Other">:</span> <span class="Identifier">WebSocket</span><span class="Other">;</span> <span class="Identifier">data</span><span class="Other">:</span> <span class="Identifier">cstring</span><span class="Other">)</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">importcpp</span></div><span class="Other pragmaend">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="/tree/master/websockets.nim#L28"
+href="/tree/master/src/websockets.nim#L74"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/websockets.nim#L28" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/websockets.nim#L74" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 <dt id="close"><a name="close,WebSocket"></a><pre><span class="Keyword">proc</span> <span class="Identifier">close</span><span class="Other">(</span><span class="Identifier">ws</span><span class="Other">:</span> <span class="Identifier">WebSocket</span><span class="Other">)</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">importcpp</span></div><span class="Other pragmaend">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="/tree/master/websockets.nim#L30"
+href="/tree/master/src/websockets.nim#L76"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/websockets.nim#L30" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/websockets.nim#L76" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 <dt id="close"><a name="close,WebSocket,Natural,cstring"></a><pre><span class="Keyword">proc</span> <span class="Identifier">close</span><span class="Other">(</span><span class="Identifier">ws</span><span class="Other">:</span> <span class="Identifier">WebSocket</span><span class="Other">;</span> <span class="Identifier">code</span><span class="Other">:</span> <span class="Identifier">Natural</span><span class="Other">;</span> <span class="Identifier">reason</span><span class="Other">:</span> <span class="Identifier">cstring</span><span class="Other">)</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">importcpp</span></div><span class="Other pragmaend">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="/tree/master/websockets.nim#L31"
+href="/tree/master/src/websockets.nim#L77"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/websockets.nim#L31" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/websockets.nim#L77" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
@@ -1355,7 +1377,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2017-03-01 16:39:14 UTC</small>
+        <small>Made with Nim. Generated: 2017-03-01 19:10:12 UTC</small>
       </div>
     </div>
   </div>

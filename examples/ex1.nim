@@ -8,7 +8,7 @@ ws.onopen = proc(e:Event) =
   ws.send("test")
 ws.onmessage = proc(e:MessageEvent) =
   outputid.append("received: ",e.data)
-  ws.close(1000,"received msg")
+  ws.close(scNormal,"received msg")
 ws.onclose = proc(e:CloseEvent) =
   outputid.append("closing: ",e.reason)
 
