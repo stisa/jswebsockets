@@ -1,4 +1,4 @@
-import ../src/websockets
+import ../src/jswebsockets
 
 var ws = openws("ws://echo.websocket.org/")
 var outputid = "output" # nicer syntax for appending

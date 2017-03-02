@@ -10,7 +10,7 @@ srcDir = "src"
 requires: "nim >= 0.14.0"
 
 task docs:
-  exec("nim doc2 -o:docs/websockets.html ./src/websockets.nim")
+  exec("nim doc2 -o:docs/jswebsockets.html ./src/jswebsockets.nim")
   exec("nim e buildex.nims")
 task exampler:
   exec("nim e buildex.nims")

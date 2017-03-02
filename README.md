@@ -1,17 +1,19 @@
-Websockets
+JsWebsockets
 ----
 
 Beginning of a wrapper for websockets, for the javascript backend of [nim](https://nim-lang.org)
   
-[Examples](http://stisa.space/websockets)  
+[Examples](http://stisa.space/jswebsockets)  
 
-[Generated Docs](http://stisa.space/websockets/websockets.html)
+[Generated Docs](http://stisa.space/jswebsockets/jswebsockets.html)
+
+**NOTE**: The `append` proc is only exported when compiling with `-d:test`.
 
 ```nim
-import websockets
+import jswebsockets
 
 var ws = openws("ws://echo.websocket.org/")
-var outputid = "output" # nicer syntax for appending
+var outputid = "output" # convenience for appending
 
 ws.onopen = proc(e:Event) =
   outputid.append("sent: test")
