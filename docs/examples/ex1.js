@@ -430,7 +430,7 @@ return result_38653;
 }
 function append_43001(toID_43003, s_43005) {
 
-var F={procname:"jswebsockets.append",prev:framePtr,filename:"/data/data/com.termux/files/home/proj/websockets/src/jswebsockets.nim",line:0};
+var F={procname:"jswebsockets.append",prev:framePtr,filename:"C:\\Users\\stisa\\OneDrive\\Progetti\\websockets\\src\\jswebsockets.nim",line:0};
 framePtr = F;
 F.line = 107;
 var p_43006 = document.createElement("P");

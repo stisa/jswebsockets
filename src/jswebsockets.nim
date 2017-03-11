@@ -117,7 +117,7 @@ when ismainmodule:
     ws.send("test")
   ws.onmessage = proc(e:MessageEvent) =
     echo("received: ",e.data)
-    ws.close(1000,"received msg")
+    ws.close(StatusCode(1000),"received msg")
   ws.onclose = proc(e:CloseEvent) =
     echo("closing: ",e.reason)
 

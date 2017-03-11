@@ -1,16 +1,23 @@
 # Package
-version       = "0.1.0"
+version       = "0.1.2"
 author        = "stisa"
 description   = "Wrapper for js websockets"
 license       = "MIT"
 
 srcDir = "src"
-
+skipDirs = @["templates"]
 # Deps
-requires: "nim >= 0.14.0"
+requires: "nim >= 0.16.0"
+import ospaths
 
-task docs:
-  exec("nim doc2 -o:docs/jswebsockets.html ./src/jswebsockets.nim")
-  exec("nim e buildex.nims")
-task exampler:
-  exec("nim e buildex.nims")
+task docs, "Build docs":
+  mkdir "docs"
+  exec("nim doc2 --verbosity:0 --hints:off -o:" & "docs"/"jswebsockets.html " & "."/"src"/"jswebsockets.nim")
+
+task examples, "Build examples":
+  exec("exampler")
+  mkdir "docs"/"examples"
+  withdir "examples":
+    for file in listfiles("."):
+      if splitfile(file).ext == ".nim":
+        exec "nim js -d:test --verbosity:0 --hints:off -o:" & ".."/"docs"/"examples"/ file.changefileext("js") & " " & file
