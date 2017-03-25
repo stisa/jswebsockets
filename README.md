@@ -7,21 +7,19 @@ Beginning of a wrapper for websockets, for the javascript backend of [nim](https
 
 [Generated Docs](http://stisa.space/jswebsockets/jswebsockets.html)
 
-**NOTE**: The `append` proc is only exported when compiling with `-d:test`.
-
 ```nim
 import jswebsockets
 
-var ws = openws("ws://echo.websocket.org/")
-var outputid = "output" # convenience for appending
+var
+  socket = newWebSocket("ws://echo.websocket.org/")
 
-ws.onopen = proc(e:Event) =
-  outputid.append("sent: test")
-  ws.send("test")
-ws.onmessage = proc(e:MessageEvent) =
-  outputid.append("received: ",e.data)
-  ws.close(StatusCode(1000),"received msg")
-ws.onclose = proc(e:CloseEvent) =
-  outputid.append("closing: ",e.reason)
+socket.onOpen = proc (e:Event) =
+  echo("sent: test")
+  socket.send("test")
+socket.onMessage = proc (e:MessageEvent) =
+  echo("received: ",e.data)
+  socket.close(StatusCode(1000),"received msg")
+socket.onClose = proc (e:CloseEvent) =
+  echo("closing: ",e.reason)
 ```
 

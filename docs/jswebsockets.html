@@ -1156,12 +1156,18 @@ dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator
 div.search_results {
   background-color: antiquewhite;
   margin: 3em;
+  border-style: inset;
   padding: 1em;
-  border: 1px solid #4d4d4d;
+}
+#searchInput {
+	width: 100%;
+	margin-bottom: 0.5em;
+}
+
+#groupBy {
+	margin-bottom: 0.5em;	
 }
 </style>
-
-<script type="text/javascript" src="../dochack.js"></script>
 
 <script type="text/javascript">
 function togglepragma(d) {
@@ -1188,7 +1194,16 @@ function main() {
   }
 }
 </script>
-
+<script>
+	// Detects shift+f to focuses the search box
+	document.addEventListener('keydown', function(event) {
+	  if (event.keyCode == 70 && event.shiftKey) {
+	  	event.preventDefault() // avoids writing F on the search box
+	  	var input = document.getElementById("searchInput");
+			input.focus();
+	  } 
+	}, true);
+</script>
 </head>
 <body onload="main()">
 <div class="document" id="documentId">
@@ -1196,17 +1211,6 @@ function main() {
     <h1 class="title">Module jswebsockets</h1>
     <div class="row">
   <div class="three columns">
-  <div>
-    Search: <input type="text" id="searchInput"
-      onkeyup="search()" />
-  </div>
-  <div>
-    Group by:
-    <select onchange="groupBy(this.value)">
-      <option value="section">Section</option>
-      <option value="type">Type</option>
-    </select>
-  </div>
   <ul class="simple simple-toc" id="toc-list">
 <li>
   <a class="reference reference-toplevel" href="#6" id="56">Imports</a>
@@ -1226,14 +1230,24 @@ function main() {
   scTLSHandshake = 1015"><wbr />Status<wbr />Code<span class="attachedType" style="visibility:hidden"></span></a></li>
   <li><a class="reference" href="#MessageEvent"
     title="MessageEvent = object of Event
-  data*: cstring"><wbr />Message<wbr />Event<span class="attachedType" style="visibility:hidden"></span></a></li>
+  data*: cstring
+  origin*: cstring"><wbr />Message<wbr />Event<span class="attachedType" style="visibility:hidden"></span></a></li>
   <li><a class="reference" href="#CloseEvent"
     title="CloseEvent = object of Event
   code*: Natural
   reason*: cstring
   wasClean*: bool"><wbr />Close<wbr />Event<span class="attachedType" style="visibility:hidden"></span></a></li>
+  <li><a class="reference" href="#ReadyState"
+    title="ReadyState = enum
+  Connecting = 0, Open = 1, Closing = 2, Closed = 3"><wbr />Ready<wbr />State<span class="attachedType" style="visibility:hidden"></span></a></li>
   <li><a class="reference" href="#WebSocket"
-    title="WebSocket = object of WebSocketObj"><wbr />Web<wbr />Socket<span class="attachedType" style="visibility:hidden"></span></a></li>
+    title="WebSocket = ref object of EventTarget
+  url*: cstring
+  protocol*: cstring
+  readyState*: ReadyState
+  onopen*: proc (event: Event)
+  onclose*: proc (event: CloseEvent)
+  onmessage*: proc (event: MessageEvent)"><wbr />Web<wbr />Socket<span class="attachedType" style="visibility:hidden"></span></a></li>
 
   </ul>
 </li>
@@ -1244,12 +1258,23 @@ function main() {
     title="openws(url: cstring): WebSocket"><wbr />openws<span class="attachedType" style="visibility:hidden">WebSocket</span></a></li>
   <li><a class="reference" href="#openws,string,seq[string]"
     title="openws(url: string; protocols: seq[string]): WebSocket"><wbr />openws<span class="attachedType" style="visibility:hidden">WebSocket</span></a></li>
+  <li><a class="reference" href="#newWebSocket,cstring"
+    title="newWebSocket(url: cstring): WebSocket"><wbr />new<wbr />Web<wbr />Socket<span class="attachedType" style="visibility:hidden">WebSocket</span></a></li>
+  <li><a class="reference" href="#newWebSocket,cstring,cstring"
+    title="newWebSocket(url: cstring; protocol: cstring): WebSocket"><wbr />new<wbr />Web<wbr />Socket<span class="attachedType" style="visibility:hidden">WebSocket</span></a></li>
+  <li><a class="reference" href="#newWebSocket,cstring,seq[cstring]"
+    title="newWebSocket(url: cstring; protocols: seq[cstring]): WebSocket"><wbr />new<wbr />Web<wbr />Socket<span class="attachedType" style="visibility:hidden">WebSocket</span></a></li>
+  <li><a class="reference" href="#addEventListener,EventTarget,cstring,proc()"
+    title="addEventListener[](et: EventTarget; ev: cstring;
+                   cb: proc (ev: MessageEvent | CloseEvent))"><wbr />add<wbr />Event<wbr />Listener<span class="attachedType" style="visibility:hidden">MessageEvent</span></a></li>
   <li><a class="reference" href="#send,WebSocket,cstring"
-    title="send(ws: WebSocket; data: cstring)"><wbr />send<span class="attachedType" style="visibility:hidden">WebSocket</span></a></li>
+    title="send(socket: WebSocket; data: cstring)"><wbr />send<span class="attachedType" style="visibility:hidden">WebSocket</span></a></li>
   <li><a class="reference" href="#close,WebSocket"
-    title="close(ws: WebSocket)"><wbr />close<span class="attachedType" style="visibility:hidden">WebSocket</span></a></li>
+    title="close(socket: WebSocket)"><wbr />close<span class="attachedType" style="visibility:hidden">WebSocket</span></a></li>
+  <li><a class="reference" href="#close,WebSocket,"
+    title="close[](socket: WebSocket; code: StatusCode | Natural)"><wbr />close<span class="attachedType" style="visibility:hidden">WebSocket</span></a></li>
   <li><a class="reference" href="#close,WebSocket,,cstring"
-    title="close[](ws: WebSocket; code: StatusCode | Natural; reason: cstring)"><wbr />close<span class="attachedType" style="visibility:hidden">WebSocket</span></a></li>
+    title="close[](socket: WebSocket; code: StatusCode | Natural; reason: cstring)"><wbr />close<span class="attachedType" style="visibility:hidden">WebSocket</span></a></li>
 
   </ul>
 </li>
@@ -1277,20 +1302,21 @@ function main() {
 <dd>
 
 &nbsp;&nbsp;<a
-href="/tree/master/src/jswebsockets.nim#L9"
+href="/tree/master/src/jswebsockets.nim#L10"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/src/jswebsockets.nim#L9" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/jswebsockets.nim#L10" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 <dt id="MessageEvent"><a name="MessageEvent"></a><pre><span class="Identifier">MessageEvent</span> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">Event</span>
   <span class="Identifier">data</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">cstring</span>
+  <span class="Identifier">origin</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">cstring</span>
 </pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="/tree/master/src/jswebsockets.nim#L27"
+href="/tree/master/src/jswebsockets.nim#L28"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/src/jswebsockets.nim#L27" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/jswebsockets.nim#L28" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 <dt id="CloseEvent"><a name="CloseEvent"></a><pre><span class="Identifier">CloseEvent</span> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">Event</span>
@@ -1299,42 +1325,37 @@ class="link-seesrc" target="_blank">Source</a>
   <span class="Identifier">wasClean</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">bool</span>
 </pre></dt>
 <dd>
-<p>Status code	Name	Description</p>
-<p>0–999	 	Reserved and not used.</p>
-<p>1000	CLOSE_NORMAL	Normal closure; the connection successfully completed whatever purpose for which it was created.</p>
-<p>1001	CLOSE_GOING_AWAY	The endpoint is going away, either because of a server failure or because the browser is navigating away from the page that opened the connection.</p>
-<p>1002	CLOSE_PROTOCOL_ERROR	The endpoint is terminating the connection due to a protocol error.</p>
-<p>1003	CLOSE_UNSUPPORTED	The connection is being terminated because the endpoint received data of a type it cannot accept (for example, a text-only endpoint received binary data).</p>
-<p>1004	 	Reserved. A meaning might be defined in the future.</p>
-<p>1005	CLOSE_NO_STATUS	Reserved.  Indicates that no status code was provided even though one was expected.</p>
-<p>1006	CLOSE_ABNORMAL	Reserved. Used to indicate that a connection was closed abnormally (that is, with no close frame being sent) when a status code is expected.</p>
-<p>1007	Unsupported Data	The endpoint is terminating the connection because a message was received that contained inconsistent data (e.g., non-UTF-8 data within a text message).</p>
-<p>1008	Policy Violation	The endpoint is terminating the connection because it received a message that violates its policy. This is a generic status code, used when codes 1003 and 1009 are not suitable.</p>
-<p>1009	CLOSE_TOO_LARGE	The endpoint is terminating the connection because a data frame was received that is too large.</p>
-<p>1010	Missing Extension	The client is terminating the connection because it expected the server to negotiate one or more extension, but the server didn't.</p>
-<p>1011	Internal Error	The server is terminating the connection because it encountered an unexpected condition that prevented it from fulfilling the request.</p>
-<p>1012	Service Restart	The server is terminating the connection because it is restarting. [Ref]</p>
-<p>1013	Try Again Later	The server is terminating the connection due to a temporary condition, e.g. it is overloaded and is casting off some of its clients. [Ref]</p>
-<p>1014	 	Reserved for future use by the WebSocket standard.</p>
-<p>1015	TLS Handshake	Reserved. Indicates that the connection was closed due to a failure to perform a TLS handshake (e.g., the server certificate can't be verified).</p>
-<p>1016–1999	 	Reserved for future use by the WebSocket standard.</p>
-<p>2000–2999	 	Reserved for use by WebSocket extensions.</p>
-<p>3000–3999	 	Available for use by libraries and frameworks. May not be used by applications. Available for registration at the IANA via first-come, first-serve.</p>
-<p>4000–4999	 	Available for use by applications.</p>
-
+To learn more, see here: <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent#Properties">https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent#Properties</a>
 &nbsp;&nbsp;<a
-href="/tree/master/src/jswebsockets.nim#L30"
+href="/tree/master/src/jswebsockets.nim#L32"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/src/jswebsockets.nim#L30" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/jswebsockets.nim#L32" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="WebSocket"><a name="WebSocket"></a><pre><span class="Identifier">WebSocket</span> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">WebSocketObj</span></pre></dt>
+<dt id="ReadyState"><a name="ReadyState"></a><pre><span class="Identifier">ReadyState</span> <span class="Other">=</span> <span class="Keyword">enum</span>
+  <span class="Identifier">Connecting</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">,</span> <span class="Identifier">Open</span> <span class="Other">=</span> <span class="DecNumber">1</span><span class="Other">,</span> <span class="Identifier">Closing</span> <span class="Other">=</span> <span class="DecNumber">2</span><span class="Other">,</span> <span class="Identifier">Closed</span> <span class="Other">=</span> <span class="DecNumber">3</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="/tree/master/src/jswebsockets.nim#L89"
+href="/tree/master/src/jswebsockets.nim#L37"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/src/jswebsockets.nim#L89" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/jswebsockets.nim#L37" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+<dt id="WebSocket"><a name="WebSocket"></a><pre><span class="Identifier">WebSocket</span> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">EventTarget</span>
+  <span class="Identifier">url</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">cstring</span>
+  <span class="Identifier">protocol</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">cstring</span>
+  <span class="Identifier">readyState</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">ReadyState</span>
+  <span class="Identifier">onopen</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">event</span><span class="Other">:</span> <span class="Identifier">Event</span><span class="Other">)</span>
+  <span class="Identifier">onclose</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">event</span><span class="Other">:</span> <span class="Identifier">CloseEvent</span><span class="Other">)</span>
+  <span class="Identifier">onmessage</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">event</span><span class="Other">:</span> <span class="Identifier">MessageEvent</span><span class="Other">)</span>
+</pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="/tree/master/src/jswebsockets.nim#L40"
+class="link-seesrc" target="_blank">Source</a>
+<a href="/edit/devel/src/jswebsockets.nim#L40" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
@@ -1342,50 +1363,98 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<dt id="openws"><a name="openws,cstring"></a><pre><span class="Keyword">proc</span> <span class="Identifier">openws</span><span class="Other">(</span><span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">cstring</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">WebSocket</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;new WebSocket(#)&quot;</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<dt id="openws"><a name="openws,cstring"></a><pre><span class="Keyword">proc</span> <span class="Identifier">openws</span><span class="Other">(</span><span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">cstring</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">WebSocket</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;new WebSocket(#)&quot;</span><span class="Other">,</span> <span class="Identifier">deprecated</span></div><span class="Other pragmaend">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="/tree/master/src/jswebsockets.nim#L91"
+href="/tree/master/src/jswebsockets.nim#L48"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/src/jswebsockets.nim#L91" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/jswebsockets.nim#L48" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 <dt id="openws"><a name="openws,string,seq[string]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">openws</span><span class="Other">(</span><span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">string</span><span class="Other">;</span> <span class="Identifier">protocols</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">string</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">WebSocket</span> <span class="Other pragmabegin">{.</span><div class="pragma">
+    <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;new WebSocket(#,@)&quot;</span><span class="Other">,</span> <span class="Identifier">deprecated</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="/tree/master/src/jswebsockets.nim#L50"
+class="link-seesrc" target="_blank">Source</a>
+<a href="/edit/devel/src/jswebsockets.nim#L50" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+<dt id="newWebSocket"><a name="newWebSocket,cstring"></a><pre><span class="Keyword">proc</span> <span class="Identifier">newWebSocket</span><span class="Other">(</span><span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">cstring</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">WebSocket</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;new WebSocket(#)&quot;</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="/tree/master/src/jswebsockets.nim#L53"
+class="link-seesrc" target="_blank">Source</a>
+<a href="/edit/devel/src/jswebsockets.nim#L53" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+<dt id="newWebSocket"><a name="newWebSocket,cstring,cstring"></a><pre><span class="Keyword">proc</span> <span class="Identifier">newWebSocket</span><span class="Other">(</span><span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">cstring</span><span class="Other">;</span> <span class="Identifier">protocol</span><span class="Other">:</span> <span class="Identifier">cstring</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">WebSocket</span> <span class="Other pragmabegin">{.</span><div class="pragma">
     <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;new WebSocket(#,@)&quot;</span></div><span class="Other pragmaend">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="/tree/master/src/jswebsockets.nim#L93"
+href="/tree/master/src/jswebsockets.nim#L55"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/src/jswebsockets.nim#L93" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/jswebsockets.nim#L55" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="send"><a name="send,WebSocket,cstring"></a><pre><span class="Keyword">proc</span> <span class="Identifier">send</span><span class="Other">(</span><span class="Identifier">ws</span><span class="Other">:</span> <span class="Identifier">WebSocket</span><span class="Other">;</span> <span class="Identifier">data</span><span class="Other">:</span> <span class="Identifier">cstring</span><span class="Other">)</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">importcpp</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<dt id="newWebSocket"><a name="newWebSocket,cstring,seq[cstring]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">newWebSocket</span><span class="Other">(</span><span class="Identifier">url</span><span class="Other">:</span> <span class="Identifier">cstring</span><span class="Other">;</span> <span class="Identifier">protocols</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">cstring</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">WebSocket</span> <span class="Other pragmabegin">{.</span><div class="pragma">
+    <span class="Identifier">importcpp</span><span class="Other">:</span> <span class="StringLit">&quot;new WebSocket(#,@)&quot;</span></div><span class="Other pragmaend">.}</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="/tree/master/src/jswebsockets.nim#L95"
+href="/tree/master/src/jswebsockets.nim#L58"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/src/jswebsockets.nim#L95" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/jswebsockets.nim#L58" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="close"><a name="close,WebSocket"></a><pre><span class="Keyword">proc</span> <span class="Identifier">close</span><span class="Other">(</span><span class="Identifier">ws</span><span class="Other">:</span> <span class="Identifier">WebSocket</span><span class="Other">)</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">importcpp</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<dt id="addEventListener"><a name="addEventListener,EventTarget,cstring,proc()"></a><pre><span class="Keyword">proc</span> <span class="Identifier">addEventListener</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">et</span><span class="Other">:</span> <span class="Identifier">EventTarget</span><span class="Other">;</span> <span class="Identifier">ev</span><span class="Other">:</span> <span class="Identifier">cstring</span><span class="Other">;</span>
+                       <span class="Identifier">cb</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">ev</span><span class="Other">:</span> <span class="Identifier">MessageEvent</span> <span class="Operator">|</span> <span class="Identifier">CloseEvent</span><span class="Other">)</span><span class="Other">)</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="/tree/master/src/jswebsockets.nim#L97"
+href="/tree/master/src/jswebsockets.nim#L63"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/src/jswebsockets.nim#L97" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/jswebsockets.nim#L63" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="close"><a name="close,WebSocket,,cstring"></a><pre><span class="Keyword">proc</span> <span class="Identifier">close</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">ws</span><span class="Other">:</span> <span class="Identifier">WebSocket</span><span class="Other">;</span> <span class="Identifier">code</span><span class="Other">:</span> <span class="Identifier">StatusCode</span> <span class="Operator">|</span> <span class="Identifier">Natural</span><span class="Other">;</span> <span class="Identifier">reason</span><span class="Other">:</span> <span class="Identifier">cstring</span><span class="Other">)</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">importcpp</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<dt id="send"><a name="send,WebSocket,cstring"></a><pre><span class="Keyword">proc</span> <span class="Identifier">send</span><span class="Other">(</span><span class="Identifier">socket</span><span class="Other">:</span> <span class="Identifier">WebSocket</span><span class="Other">;</span> <span class="Identifier">data</span><span class="Other">:</span> <span class="Identifier">cstring</span><span class="Other">)</span></pre></dt>
 <dd>
 
 &nbsp;&nbsp;<a
-href="/tree/master/src/jswebsockets.nim#L98"
+href="/tree/master/src/jswebsockets.nim#L66"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/src/jswebsockets.nim#L98" class="link-seesrc" target="_blank" >Edit</a>
+<a href="/edit/devel/src/jswebsockets.nim#L66" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+<dt id="close"><a name="close,WebSocket"></a><pre><span class="Keyword">proc</span> <span class="Identifier">close</span><span class="Other">(</span><span class="Identifier">socket</span><span class="Other">:</span> <span class="Identifier">WebSocket</span><span class="Other">)</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="/tree/master/src/jswebsockets.nim#L67"
+class="link-seesrc" target="_blank">Source</a>
+<a href="/edit/devel/src/jswebsockets.nim#L67" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+<dt id="close"><a name="close,WebSocket,"></a><pre><span class="Keyword">proc</span> <span class="Identifier">close</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">socket</span><span class="Other">:</span> <span class="Identifier">WebSocket</span><span class="Other">;</span> <span class="Identifier">code</span><span class="Other">:</span> <span class="Identifier">StatusCode</span> <span class="Operator">|</span> <span class="Identifier">Natural</span><span class="Other">)</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="/tree/master/src/jswebsockets.nim#L68"
+class="link-seesrc" target="_blank">Source</a>
+<a href="/edit/devel/src/jswebsockets.nim#L68" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+<dt id="close"><a name="close,WebSocket,,cstring"></a><pre><span class="Keyword">proc</span> <span class="Identifier">close</span><span class="Other">[</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">socket</span><span class="Other">:</span> <span class="Identifier">WebSocket</span><span class="Other">;</span> <span class="Identifier">code</span><span class="Other">:</span> <span class="Identifier">StatusCode</span> <span class="Operator">|</span> <span class="Identifier">Natural</span><span class="Other">;</span> <span class="Identifier">reason</span><span class="Other">:</span> <span class="Identifier">cstring</span><span class="Other">)</span></pre></dt>
+<dd>
+
+&nbsp;&nbsp;<a
+href="/tree/master/src/jswebsockets.nim#L69"
+class="link-seesrc" target="_blank">Source</a>
+<a href="/edit/devel/src/jswebsockets.nim#L69" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
@@ -1398,7 +1467,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2017-03-11 20:37:46 UTC</small>
+        <small>Made with Nim. Generated: 2017-03-25 22:02:17 UTC</small>
       </div>
     </div>
   </div>

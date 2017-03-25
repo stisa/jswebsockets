@@ -214,13 +214,6 @@ unhandledException(e_13206);
 
 e_13206.trace = nimCopy(null, rawWriteStackTrace_13028(), NTI138);
 throw e_13206;}
-function mnewString(len_14403) {
-
-      var result = new Array(len_14403+1);
-      result[0] = 0;
-      result[len_14403] = 0;
-      return result;
-    }
 var nimvm_5887 = false;
 var nim_program_result = 0;
 var globalRaiseHook_10805 = [null];
@@ -383,87 +376,31 @@ e_13659.message = nimCopy(null, makeNimstrLit("division by zero"), NTI138);
 e_13659.parent = null;
 raiseException(e_13659, "DivByZeroError");
 }
-var ws_44001 = /**/[new WebSocket("ws://echo.websocket.org/")];
-var outputid_44002 = /**/[makeNimstrLit("output")];
-function nsuJoinSep(a_38651, sep_38652) {
-
-var result_38653 = null;
-if ((0 < (a_38651 != null ? a_38651.length : 0))) {
-var L_38668 = ((sep_38652 != null ? sep_38652.length-1 : 0) * ((a_38651 != null ? a_38651.length : 0) - 1));
-L1: do {
-var i_38678 = 0;
-var colontmp__38699 = 0;
-colontmp__38699 = (a_38651 != null ? (a_38651.length-1) : -1);
-var res_38702 = 0;
-L2: do {
-L3: while (true) {
-if (!(res_38702 <= colontmp__38699)) break L3;
-i_38678 = res_38702;
-L_38668 += (a_38651[i_38678] != null ? a_38651[i_38678].length-1 : 0);
-res_38702 += 1;
-}
-} while(false);
-} while(false);
-result_38653 = nimCopy(null, mnewString(0), NTI138);
-if (result_38653 != null) { result_38653 = (result_38653.slice(0, -1)).concat(a_38651[0]); } else { result_38653 = a_38651[0];};
-L4: do {
-var i_38697 = 0;
-var colontmp__38707 = 0;
-colontmp__38707 = (a_38651 != null ? (a_38651.length-1) : -1);
-var res_38710 = 1;
-L5: do {
-L6: while (true) {
-if (!(res_38710 <= colontmp__38707)) break L6;
-i_38697 = res_38710;
-if (result_38653 != null) { result_38653 = (result_38653.slice(0, -1)).concat(sep_38652); } else { result_38653 = sep_38652;};
-if (result_38653 != null) { result_38653 = (result_38653.slice(0, -1)).concat(a_38651[i_38697]); } else { result_38653 = a_38651[i_38697];};
-res_38710 += 1;
-}
-} while(false);
-} while(false);
-}
-else {
-result_38653 = nimCopy(null, makeNimstrLit(""), NTI138);
-}
-
-return result_38653;
-}
-function append_43001(toID_43003, s_43005) {
-
-var F={procname:"jswebsockets.append",prev:framePtr,filename:"C:\\Users\\stisa\\OneDrive\\Progetti\\websockets\\src\\jswebsockets.nim",line:0};
-framePtr = F;
-F.line = 107;
-var p_43006 = document.createElement("P");
-F.line = 108;
-p_43006.innerHTML = toJSStr(nsuJoinSep(s_43005, makeNimstrLit("")));
-F.line = 109;
-var parent_43007 = document.getElementById(toJSStr(toID_43003));
-parent_43007.appendChild(p_43006);
-framePtr = F.prev;
-}
-function colonanonymous__44003(e_44005) {
+var socket_45001 = /**/[new WebSocket("ws://echo.websocket.org/")];
+var outputid_45002 = /**/[makeNimstrLit("output")];
+function colonanonymous__45003(event_45005) {
 
 var F={procname:"ex1.:anonymous",prev:framePtr,filename:"ex1.nim",line:0};
 framePtr = F;
-append_43001(outputid_44002[0], [makeNimstrLit("sent: test")]);
-ws_44001[0].send("test");
+outputid_45002[0].append([makeNimstrLit("sent: test")]);
+socket_45001[0].send("test");
 framePtr = F.prev;
 }
-ws_44001[0].onopen = colonanonymous__44003;
-function colonanonymous__44008(e_44010) {
+socket_45001[0].onopen = colonanonymous__45003;
+function colonanonymous__45008(event_45010) {
 
 var F={procname:"ex1.:anonymous",prev:framePtr,filename:"ex1.nim",line:0};
 framePtr = F;
-append_43001(outputid_44002[0], [makeNimstrLit("received: "), cstrToNimstr(e_44010.data)]);
-ws_44001[0].close(1000, "received msg");
+outputid_45002[0].append([makeNimstrLit("received: "), cstrToNimstr(event_45010.data)]);
+socket_45001[0].close(1000, "received msg");
 framePtr = F.prev;
 }
-ws_44001[0].onmessage = colonanonymous__44008;
-function colonanonymous__44023(e_44025) {
+socket_45001[0].onmessage = colonanonymous__45008;
+function colonanonymous__45023(event_45025) {
 
 var F={procname:"ex1.:anonymous",prev:framePtr,filename:"ex1.nim",line:0};
 framePtr = F;
-append_43001(outputid_44002[0], [makeNimstrLit("closing: "), cstrToNimstr(e_44025.reason)]);
+outputid_45002[0].append([makeNimstrLit("closing: "), cstrToNimstr(event_45025.reason)]);
 framePtr = F.prev;
 }
-ws_44001[0].onclose = colonanonymous__44023;
+socket_45001[0].onclose = colonanonymous__45023;
