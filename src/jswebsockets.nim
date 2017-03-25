@@ -52,7 +52,10 @@ proc openws*(url: string, protocols: seq[string]): WebSocket
 
 proc newWebSocket*(url: cstring): WebSocket {.importcpp: "new WebSocket(#)".}
 
-proc newWebSocket*(url: cstring, protocols: string | seq[string]): WebSocket
+proc newWebSocket*(url: cstring, protocol: cstring): WebSocket
+  {.importcpp: "new WebSocket(#,@)".}
+
+proc newWebSocket*(url: cstring, protocols: seq[cstring]): WebSocket
   {.importcpp: "new WebSocket(#,@)".}
 
 {.push importcpp.}
